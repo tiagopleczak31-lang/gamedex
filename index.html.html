@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="GameDex: explore jogos, personagens e universos gamer.">
+<title>GameDex — Enciclopédia Gamer</title>
+<style>
+:root{--bg:#090d18;--panel:#111a2b;--line:#293951;--muted:#9ba9c2;--blue:#38bdf8;--text:#f1f5ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Arial,sans-serif}
+header{padding:16px max(5%,calc((100% - 1100px)/2));display:flex;justify-content:space-between;align-items:center;gap:15px;border-bottom:1px solid #26334a;flex-wrap:wrap}
+.logo{font-size:23px;font-weight:900;letter-spacing:1px}.logo span{color:var(--blue)}.subtitle{font-size:10px;letter-spacing:2px;color:var(--muted)}
+nav{display:flex;gap:7px;flex-wrap:wrap}button{cursor:pointer;font:inherit}nav button,.secondary,.category{border:1px solid transparent;background:transparent;color:#aab8ce;padding:9px 12px;border-radius:9px}
+nav button.active,.category.active{background:#16436a;color:#a8e1ff;border-color:#248bc5}
+main{max-width:1100px;margin:auto;padding:26px 5%}
+.hero{padding:32px;border-radius:18px;margin-bottom:22px;background:radial-gradient(ellipse at 90% 20%,#204c77 0%,transparent 48%),linear-gradient(110deg,#142b48,#17152f)}
+.eyebrow{font-size:12px;letter-spacing:2px;color:#72caff}.hero h1{font-size:clamp(30px,5vw,48px);line-height:1.1;margin:14px 0}.hero p{color:var(--muted);max-width:520px}
+.primary{background:#1686cb;color:white;border:0;border-radius:9px;padding:11px 16px;font-weight:700}
+.stats,.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.stats{margin:20px 0 28px}.panel,.game{background:var(--panel);border:1px solid var(--line);border-radius:13px}.stats .panel{text-align:center;padding:13px}.stats strong{font-size:24px;display:block}.muted{color:var(--muted);font-size:13px}
+.section-title{font-size:20px;margin:22px 0 13px}.game{padding:0;text-align:left;color:var(--text);overflow:hidden;transition:.2s}.game:hover{border-color:#39a9e8;transform:translateY(-2px)}
+.art{height:120px;display:grid;place-items:center;font-size:58px;background:radial-gradient(ellipse at center,#304d70,#15233b 70%,#111827)}
+.game-info{padding:13px}.game-info h3{font-size:15px;margin:0 0 6px}.tag{display:inline-block;font-size:11px;border:1px solid #354862;border-radius:30px;padding:4px 9px;color:#9bd8ff;margin-top:10px}
+.field{width:100%;background:#101a2a;border:1px solid #34445e;border-radius:9px;padding:12px;color:white;font:inherit;margin:12px 0}.filters{display:flex;gap:8px;overflow-x:auto;padding:4px 0 13px}.category{white-space:nowrap;border-color:#283951;background:#142035}
+.page[hidden]{display:none!important}.detail{overflow:hidden}.detail .art{height:190px;font-size:85px}.detail-body{padding:22px}.detail h1{margin:12px 0}.facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}.facts div{background:#17243a;padding:13px;border-radius:9px}.facts small{display:block;color:var(--muted);margin-bottom:5px}
+footer{text-align:center;color:var(--muted);border-top:1px solid #26334a;padding:22px;font-size:12px}
+@media(max-width:650px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{gap:7px}.hero{padding:23px}.stats .panel{padding:10px}.stats strong{font-size:20px}}
+@media(max-width:380px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+ <div><div class="logo">GAME<span>DEX</span></div><div class="subtitle">EXPLORE THE GAMING UNIVERSE</div></div>
+ <nav><button class="active" data-page="home">Início</button><button data-page="library">Biblioteca</button><button data-page="about">Sobre</button></nav>
+</header>
+<main>
+<section id="home" class="page">
+ <div class="hero"><div class="eyebrow">● SUA ENCICLOPÉDIA GAMER</div><h1>Explore o universo<br><span style="color:#53c4ff">dos games.</span></h1><p>Descubra jogos, personagens, mundos e curiosidades. Tudo em um só lugar.</p><button class="primary" id="explore">Explorar biblioteca →</button></div>
+ <div class="stats"><div class="panel"><strong>12</strong><span class="muted">Jogos</span></div><div class="panel"><strong>6</strong><span class="muted">Categorias</span></div><div class="panel"><strong>∞</strong><span class="muted">Aventuras</span></div></div>
+ <h2 class="section-title">Jogos em destaque</h2><div id="featured" class="grid"></div>
+</section>
+<section id="library" class="page" hidden>
+ <h1>Biblioteca de jogos</h1><p class="muted">Encontre seu próximo jogo favorito.</p>
+ <input id="search" class="field" placeholder="⌕  Pesquisar jogos..." aria-label="Pesquisar jogos">
+ <div id="filters" class="filters"><button class="category active" data-cat="Todos">Todos</button><button class="category" data-cat="Aventura">Aventura</button><button class="category" data-cat="RPG">RPG</button><button class="category" data-cat="Ação">Ação</button><button class="category" data-cat="Simulação">Simulação</button><button class="category" data-cat="Corrida">Corrida</button><button class="category" data-cat="Sobrevivência">Sobrevivência</button></div>
+ <p id="count" class="muted"></p><div id="catalog" class="grid"></div><p id="empty" hidden class="muted">Nenhum jogo encontrado. Tente outra pesquisa.</p>
+</section>
+<section id="about" class="page" hidden><div class="panel" style="padding:25px"><div style="font-size:42px">🎮</div><h1>Sobre o GameDex</h1><p class="muted">O GameDex é uma enciclopédia gamer para reunir informações sobre diferentes universos dos videogames.</p><h3>O que você encontra aqui?</h3><p class="muted">✦ Catálogo de jogos<br>✦ Informações e curiosidades<br>✦ Categorias de jogos<br>✦ Descoberta de novos universos</p><p class="muted">GAMEDEX v1.0 — Primeira versão do projeto.</p></div></section>
+<section id="detail" class="page" hidden></section>
+</main>
+<footer>GAMEDEX © 2026 · Explore. Descubra. Jogue.</footer>
+<script>
+const games=[
+{name:'Minecraft',cat:'Sobrevivência',icon:'⛏️',year:2011,studio:'Mojang Studios',desc:'Explore mundos gerados proceduralmente, construa estruturas e sobreviva em uma aventura cheia de possibilidades.',tags:'Construção · Exploração'},
+{name:'Grand Theft Auto V',cat:'Ação',icon:'🚘',year:2013,studio:'Rockstar Games',desc:'Um jogo de mundo aberto ambientado em Los Santos, com diferentes personagens e uma grande cidade para explorar.',tags:'Mundo aberto · Ação'},
+{name:'Pokémon Scarlet',cat:'RPG',icon:'🔴',year:2022,studio:'Game Freak',desc:'Explore a região de Paldea, conheça Pokémon e viva uma aventura de RPG.',tags:'RPG · Criaturas'},
+{name:'The Legend of Zelda',cat:'Aventura',icon:'🗡️',year:1986,studio:'Nintendo',desc:'Uma série de aventuras e exploração em mundos de fantasia, com desafios e descobertas.',tags:'Fantasia · Aventura'},
+{name:'Red Dead Redemption 2',cat:'Aventura',icon:'🤠',year:2018,studio:'Rockstar Games',desc:'Uma aventura de mundo aberto ambientada no Velho Oeste.',tags:'Mundo aberto · História'},
+{name:'Forza Horizon 5',cat:'Corrida',icon:'🏎️',year:2021,studio:'Playground Games',desc:'Explore paisagens inspiradas no México em um festival de corridas.',tags:'Automóveis · Corrida'},
+{name:'The Sims 4',cat:'Simulação',icon:'🏡',year:2014,studio:'Maxis',desc:'Crie personagens, construa casas e acompanhe histórias em um simulador de vida.',tags:'Vida · Construção'},
+{name:'Terraria',cat:'Aventura',icon:'🌳',year:2011,studio:'Re-Logic',desc:'Explore cavernas, descubra tesouros e construa em um mundo 2D.',tags:'Exploração · Construção'},
+{name:'Elden Ring',cat:'RPG',icon:'🐉',year:2022,studio:'FromSoftware',desc:'Explore as Terras Intermédias em uma aventura de fantasia e RPG.',tags:'Fantasia · Exploração'},
+{name:'God of War Ragnarök',cat:'Ação',icon:'⚔️',year:2022,studio:'Santa Monica Studio',desc:'Acompanhe Kratos e Atreus em uma jornada pela mitologia nórdica.',tags:'Mitologia · Ação'},
+{name:'Stardew Valley',cat:'Simulação',icon:'🌾',year:2016,studio:'ConcernedApe',desc:'Cuide de uma fazenda, faça amizades e descubra os segredos do vale.',tags:'Fazenda · Vida'},
+{name:'ARK: Survival Evolved',cat:'Sobrevivência',icon:'🦖',year:2017,studio:'Studio Wildcard',desc:'Sobreviva em uma ilha repleta de criaturas pré-históricas e ambientes desafiadores.',tags:'Dinossauros · Sobrevivência'}
+];
+let category='Todos',query='';
+const el=id=>document.getElementById(id);
+function card(g){return `<button class="game" data-game="${games.indexOf(g)}"><div class="art">${g.icon}</div><div class="game-info"><h3>${g.name}</h3><div class="muted">${g.year} · ${g.cat}</div><span class="tag">${g.cat}</span></div></button>`}
+function bindCards(parent){parent.querySelectorAll('[data-game]').forEach(b=>b.addEventListener('click',()=>showDetail(+b.dataset.game)))}
+function render(){let list=games.filter(g=>(category==='Todos'||g.cat===category)&&(g.name+' '+g.cat+' '+g.studio).toLowerCase().includes(query.toLowerCase()));el('catalog').innerHTML=list.map(card).join('');el('count').textContent=list.length+' jogos encontrados';el('empty').hidden=!!list.length;bindCards(el('catalog'))}
+function page(name){document.querySelectorAll('.page').forEach(s=>s.hidden=s.id!==name);document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));if(name==='library')render();window.scrollTo({top:0,behavior:'smooth'})}
+function showDetail(i){const g=games[i];el('detail').innerHTML=`<button class="secondary" id="back">← Voltar à biblioteca</button><div class="panel detail" style="margin-top:18px"><div class="art">${g.icon}</div><div class="detail-body"><span class="tag">${g.cat}</span><h1>${g.name}</h1><p class="muted">${g.desc}</p><div class="facts"><div><small>Lançamento</small><b>${g.year}</b></div><div><small>Estúdio</small><b>${g.studio}</b></div></div><small class="muted">Características</small><p>${g.tags}</p><p class="muted">Informações introdutórias. Consulte as fontes oficiais dos jogos para detalhes atualizados.</p></div></div>`;page('detail');el('back').onclick=()=>page('library')}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>page(b.dataset.page));
+el('explore').onclick=()=>page('library');
+el('search').oninput=e=>{query=e.target.value;render()};
+document.querySelectorAll('.category').forEach(b=>b.onclick=()=>{category=b.dataset.cat;document.querySelectorAll('.category').forEach(x=>x.classList.toggle('active',x===b));render()});
+el('featured').innerHTML=[games[0],games[1],games[2],games[3],games[4],games[8]].map(card).join('');bindCards(el('featured'));render();
+</script>
+</body></html>
